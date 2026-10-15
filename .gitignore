@@ -37,3 +37,13 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Licensed font source files (ITF FFL forbids redistribution); the logo ships as SVG outlines
+Britney_Complete/
+
+# design-sync (staged converter, build output, machine state)
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules

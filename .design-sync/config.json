@@ -1,0 +1,154 @@
+{
+  "projectId": "70a28100-fd16-4678-a7d1-b3dda115ff19",
+  "shape": "package",
+  "pkg": "opensource-ui",
+  "globalName": "OpensourceUi",
+  "buildCmd": "node .design-sync/build.mjs",
+  "entry": ".design-sync/.cache/dist/index.js",
+  "srcDir": "../../../components/ui",
+  "tsconfig": "../../../tsconfig.json",
+  "cssEntry": "ds.css",
+  "extraFonts": [
+    "../../fonts/fonts.css"
+  ],
+  "docsDir": "../../docs",
+  "componentSrcMap": {
+    "Toaster": "../../../components/ui/sonner.tsx",
+    "AlertAction": null,
+    "AlertDescription": null,
+    "AlertTitle": null,
+    "AvatarBadge": null,
+    "AvatarFallback": null,
+    "AvatarGroup": null,
+    "AvatarGroupCount": null,
+    "AvatarImage": null,
+    "BreadcrumbEllipsis": null,
+    "BreadcrumbItem": null,
+    "BreadcrumbLink": null,
+    "BreadcrumbList": null,
+    "BreadcrumbPage": null,
+    "BreadcrumbSeparator": null,
+    "CardAction": null,
+    "CardContent": null,
+    "CardDescription": null,
+    "CardFooter": null,
+    "CardHeader": null,
+    "CardTitle": null,
+    "CollapsibleContent": null,
+    "CollapsibleTrigger": null,
+    "PopoverContent": null,
+    "PopoverDescription": null,
+    "PopoverHeader": null,
+    "PopoverTitle": null,
+    "PopoverTrigger": null,
+    "ProgressIndicator": null,
+    "ProgressLabel": null,
+    "ProgressTrack": null,
+    "ProgressValue": null,
+    "RadioGroupItem": null,
+    "SelectContent": null,
+    "SelectGroup": null,
+    "SelectItem": null,
+    "SelectLabel": null,
+    "SelectScrollDownButton": null,
+    "SelectScrollUpButton": null,
+    "SelectSeparator": null,
+    "SelectTrigger": null,
+    "SelectValue": null,
+    "SheetClose": null,
+    "SheetContent": null,
+    "SheetDescription": null,
+    "SheetFooter": null,
+    "SheetHeader": null,
+    "SheetTitle": null,
+    "SheetTrigger": null,
+    "SidebarContent": null,
+    "SidebarFooter": null,
+    "SidebarGroup": null,
+    "SidebarGroupAction": null,
+    "SidebarGroupContent": null,
+    "SidebarGroupLabel": null,
+    "SidebarHeader": null,
+    "SidebarInput": null,
+    "SidebarInset": null,
+    "SidebarMenu": null,
+    "SidebarMenuAction": null,
+    "SidebarMenuBadge": null,
+    "SidebarMenuButton": null,
+    "SidebarMenuItem": null,
+    "SidebarMenuSkeleton": null,
+    "SidebarMenuSub": null,
+    "SidebarMenuSubButton": null,
+    "SidebarMenuSubItem": null,
+    "SidebarProvider": null,
+    "SidebarRail": null,
+    "SidebarSeparator": null,
+    "SidebarTrigger": null,
+    "TableBody": null,
+    "TableCaption": null,
+    "TableCell": null,
+    "TableFooter": null,
+    "TableHead": null,
+    "TableHeader": null,
+    "TableRow": null,
+    "TabsContent": null,
+    "TabsList": null,
+    "TabsTrigger": null,
+    "ToggleGroupItem": null,
+    "TooltipContent": null,
+    "TooltipProvider": null,
+    "TooltipTrigger": null,
+    "Icons": null
+  },
+  "overrides": {
+    "Card": {
+      "cardMode": "column"
+    },
+    "Select": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "viewport": "480x360"
+    },
+    "Table": {
+      "cardMode": "column"
+    },
+    "Sidebar": {
+      "cardMode": "single",
+      "primaryStory": "AppShell",
+      "viewport": "760x460"
+    },
+    "HugeiconsIcon": {
+      "cardMode": "column"
+    },
+    "Popover": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "viewport": "480x320"
+    },
+    "Tooltip": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "viewport": "360x200"
+    },
+    "Sheet": {
+      "cardMode": "single",
+      "primaryStory": "Open",
+      "viewport": "720x480"
+    },
+    "Toaster": {
+      "cardMode": "single",
+      "primaryStory": "Toasts",
+      "viewport": "560x360"
+    },
+    "Alert": {
+      "cardMode": "column"
+    },
+    "Tabs": {
+      "cardMode": "column"
+    },
+    "Progress": {
+      "cardMode": "column"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}
