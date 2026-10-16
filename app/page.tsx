@@ -16,31 +16,35 @@ export default function Page() {
       {/* Hidden while saved settings are restored; see restoreScript. */}
       <div
         data-restore-target
-        className="mx-auto w-full max-w-360 flex-1 lg:grid lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:items-start lg:gap-12 lg:p-8"
+        className="mx-auto w-full max-w-360 flex-1 lg:grid lg:grid-cols-[minmax(304px,384px)_minmax(0,1fr)] lg:items-start lg:gap-12 lg:p-8"
       >
-        <ControlsPanel>
-          <div
-            id="color"
-            className="flex scroll-mt-28 flex-col gap-1 lg:scroll-mt-20"
-          >
-            <h1 className="text-[2rem] leading-10 font-semibold tracking-tight">
-              Color
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Set your brand hues. Neutrals and status colors follow, with light
-              and dark roles.
-            </p>
-          </div>
-          <ColorControls />
-          <Section
-            id="typography"
-            size="sm"
-            title="Typography"
-            description="Base size, ratio and font family."
-          >
-            <SectionPlaceholder>Coming after color</SectionPlaceholder>
-          </Section>
-        </ControlsPanel>
+        {/* Full-height divider centered in the gap; the panel inside stays
+            pinned while the page scrolls. */}
+        <div className="lg:-mr-6 lg:self-stretch lg:border-r lg:pr-6">
+          <ControlsPanel>
+            <div
+              id="color"
+              className="flex scroll-mt-28 flex-col gap-1 lg:scroll-mt-20"
+            >
+              <h1 className="text-[2rem] leading-10 font-semibold tracking-tight">
+                Color
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Set your brand hues. Neutrals and status colors follow, with
+                light and dark roles.
+              </p>
+            </div>
+            <ColorControls />
+            <Section
+              id="typography"
+              size="sm"
+              title="Typography"
+              description="Base size, ratio and font family."
+            >
+              <SectionPlaceholder>Coming after color</SectionPlaceholder>
+            </Section>
+          </ControlsPanel>
+        </div>
         <main className="flex min-w-0 flex-col gap-12 p-4 lg:p-0">
           <PalettesSection />
           <Section
