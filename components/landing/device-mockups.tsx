@@ -1,5 +1,7 @@
 import Image from "next/image"
 
+import { RiseIn } from "@/components/landing/motion"
+
 const ALT =
   "The csskit generator: brand color inputs, generated palettes and contrast checks"
 
@@ -14,7 +16,10 @@ export function DeviceMockups() {
       aria-label="csskit on a tablet"
       className="relative mx-auto -mt-36 flex max-w-7xl justify-center px-4 sm:px-8"
     >
-      <div className="relative h-[clamp(240px,42vw,480px)] w-full max-w-280 overflow-hidden">
+      <RiseIn
+        delay={0.38}
+        className="relative h-[clamp(240px,42vw,480px)] w-full max-w-280 overflow-hidden"
+      >
         <div className="absolute top-0 left-1/2 w-[min(920px,100%)] -translate-x-1/2 rounded-[clamp(20px,3vw,36px)] bg-foreground p-[clamp(6px,1vw,12px)] shadow-lg dark:bg-muted dark:ring-1 dark:ring-border">
           <Image
             src="/landing/design-light.png"
@@ -38,7 +43,7 @@ export function DeviceMockups() {
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-b from-transparent to-background"
         />
-      </div>
+      </RiseIn>
     </section>
   )
 }

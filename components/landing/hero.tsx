@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import Link from "next/link"
 
 import { LandingHeader } from "@/components/landing/landing-header"
+import { Beam, FadeIn, FadeUp } from "@/components/landing/motion"
 import { Button } from "@/components/ui/button"
 import { GITHUB_URL } from "@/lib/site"
 
@@ -20,6 +21,10 @@ const BEAMS = [
   [90, 6, 10],
 ] as const
 
+// Every second stripe breathes slower, every third in between, so they
+// drift out of step.
+const beamSeconds = (n: number) => (n % 3 === 0 ? 7 : n % 2 === 0 ? 8 : 6)
+
 // Dark neutral at the top fading to the page background, in both themes.
 const WASH =
   "linear-gradient(180deg, var(--hero-tint) 0%, color-mix(in oklch, var(--hero-tint) 55%, var(--background)) 34%, color-mix(in oklch, var(--hero-tint) 18%, var(--background)) 58%, var(--background) 86%)"
@@ -31,37 +36,43 @@ export function Hero() {
   return (
     <div className="relative overflow-hidden" style={{ background: WASH }}>
       <div aria-hidden className="dark pointer-events-none absolute inset-0">
-        {BEAMS.map(([left, width, opacity]) => (
-          <span
+        {BEAMS.map(([left, width, opacity], i) => (
+          <Beam
             key={left}
-            className="absolute top-0 h-3/5 bg-linear-to-b from-foreground to-transparent blur-[2px]"
-            style={{
-              left: `${left}%`,
-              width: `${width}%`,
-              opacity: opacity / 100,
-            }}
+            left={left}
+            width={width}
+            opacity={opacity / 100}
+            duration={beamSeconds(i + 1)}
           />
         ))}
       </div>
 
-      <LandingHeader />
+      <FadeIn className="relative">
+        <LandingHeader />
+      </FadeIn>
 
       <section
         aria-labelledby="hero-title"
         className="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 pt-12 pb-44 text-center sm:px-8 sm:pb-52"
       >
-        <h1
-          id="hero-title"
-          className="max-w-4xl font-display text-[2.5rem] leading-[3rem] font-bold tracking-normal sm:text-[4rem] sm:leading-[4.5rem]"
-        >
-          One brand color in.
-          <br />A complete design system out.
-        </h1>
-        <p className="max-w-xl text-lg text-foreground/75">
-          Palettes, contrast checks in light and dark, a type scale, radius,
-          shadows and spacing, exported as tokens for shadcn and Tailwind.
-        </p>
-        <HeroActions />
+        <FadeUp delay={0.08}>
+          <h1
+            id="hero-title"
+            className="max-w-4xl font-display text-[2.5rem] leading-[3rem] font-bold tracking-normal sm:text-[4rem] sm:leading-[4.5rem]"
+          >
+            One brand color in.
+            <br />A complete design system out.
+          </h1>
+        </FadeUp>
+        <FadeUp delay={0.18}>
+          <p className="max-w-xl text-lg text-foreground/75">
+            Palettes, contrast checks in light and dark, a type scale, radius,
+            shadows and spacing, exported as tokens for shadcn and Tailwind.
+          </p>
+        </FadeUp>
+        <FadeUp delay={0.28}>
+          <HeroActions />
+        </FadeUp>
       </section>
     </div>
   )

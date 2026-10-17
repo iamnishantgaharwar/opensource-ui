@@ -9,6 +9,7 @@ import {
   ReviewArt,
 } from "@/components/landing/illustrations"
 import { useLandingBrand } from "@/components/landing/landing-brand"
+import { Reveal } from "@/components/landing/motion"
 import { exportShadcn } from "@/lib/export/shadcn"
 import { generateTokens } from "@/lib/tokens/registry"
 
@@ -54,7 +55,7 @@ export function HowItWorks() {
       </div>
       <ol className="grid gap-6 md:grid-cols-3">
         {STEPS.map((step, i) => (
-          <li key={step.title} className="flex flex-col gap-5">
+          <Reveal as="li" key={step.title} className="flex flex-col gap-5">
             <div className="grid h-45 place-items-center rounded-[14px] bg-muted p-5">
               <step.art spot={brand} />
             </div>
@@ -67,7 +68,7 @@ export function HowItWorks() {
               </h3>
               <p className="text-muted-foreground">{step.body}</p>
             </div>
-          </li>
+          </Reveal>
         ))}
       </ol>
       <CodeBlock file={file} />

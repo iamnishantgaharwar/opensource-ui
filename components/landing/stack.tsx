@@ -2,6 +2,7 @@ import { Tick02Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
 import { StackArt } from "@/components/landing/illustrations"
+import { Reveal } from "@/components/landing/motion"
 import { LANDING_BRAND } from "@/lib/site"
 
 const STACK = [
@@ -18,7 +19,7 @@ export function Stack() {
       aria-labelledby="stack-title"
       className="mx-auto max-w-7xl px-4 pb-20 sm:px-8"
     >
-      <div className="flex flex-wrap items-center justify-between gap-x-12 gap-y-8 rounded-[14px] border p-6 sm:p-10">
+      <Reveal className="flex flex-wrap items-center justify-between gap-x-12 gap-y-8 rounded-[14px] border p-6 sm:p-10">
         <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-5">
           <div className="flex max-w-120 flex-col gap-1">
             <h2
@@ -46,7 +47,7 @@ export function Stack() {
         <div className="max-w-110 flex-[1_1_340px] max-md:hidden">
           <StackArt spot={LANDING_BRAND} />
         </div>
-      </div>
+      </Reveal>
     </section>
   )
 }

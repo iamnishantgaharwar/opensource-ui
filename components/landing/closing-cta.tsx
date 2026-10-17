@@ -4,6 +4,7 @@ import Link from "next/link"
 
 import { PlaneArt } from "@/components/landing/illustrations"
 import { Button } from "@/components/ui/button"
+import { Reveal } from "@/components/landing/motion"
 import { GITHUB_URL, LANDING_BRAND } from "@/lib/site"
 
 /**
@@ -15,7 +16,7 @@ export function ClosingCta() {
       aria-labelledby="cta-title"
       className="mx-auto max-w-7xl px-4 pb-20 sm:px-8"
     >
-      <div className="dark flex flex-wrap items-center justify-between gap-8 rounded-[14px] border bg-card px-5 py-7 text-card-foreground sm:p-12">
+      <Reveal className="dark flex flex-wrap items-center justify-between gap-8 rounded-[14px] border bg-card px-5 py-7 text-card-foreground sm:p-12">
         <div className="flex flex-[1_1_300px] flex-col gap-3">
           <h2
             id="cta-title"
@@ -54,7 +55,7 @@ export function ClosingCta() {
         <div className="shrink-0 max-md:hidden">
           <PlaneArt spot={LANDING_BRAND} />
         </div>
-      </div>
+      </Reveal>
     </section>
   )
 }

@@ -17,6 +17,7 @@ import { useMemo } from "react"
 import { useLandingBrand } from "@/components/landing/landing-brand"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Reveal } from "@/components/landing/motion"
 import { useCopy } from "@/hooks/use-copy"
 import { checkContrast, STEPS, type Step } from "@/lib/modules/color"
 import {
@@ -107,7 +108,8 @@ function Card({
   children: React.ReactNode
 }) {
   return (
-    <article
+    <Reveal
+      as="article"
       className={cn(
         "flex min-w-0 flex-col gap-6 rounded-[14px] bg-muted px-5 pt-7 pb-5",
         className
@@ -128,7 +130,7 @@ function Card({
       >
         {children}
       </div>
-    </article>
+    </Reveal>
   )
 }
 
