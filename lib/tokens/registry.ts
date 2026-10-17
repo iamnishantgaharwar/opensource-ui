@@ -1,8 +1,14 @@
 import { colorModule } from "@/lib/modules/color"
+import { radiusModule } from "@/lib/modules/radius"
+import { typographyModule } from "@/lib/modules/typography"
 import type { TokenGroup, TokenModule } from "@/lib/tokens/types"
 
 // Register new modules here; preview and exporters pick them up automatically.
-export const tokenModules = [colorModule] as const
+export const tokenModules = [
+  colorModule,
+  typographyModule,
+  radiusModule,
+] as const
 
 type Modules = (typeof tokenModules)[number]
 

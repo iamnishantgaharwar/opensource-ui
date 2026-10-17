@@ -2,6 +2,7 @@ import { clampChroma, converter, formatHex, parse } from "culori"
 
 import {
   flattenTokens,
+  type Token,
   type TokenGroup,
   type TokenLeaf,
 } from "@/lib/tokens/types"
@@ -51,6 +52,12 @@ const GROUP_LABELS: Record<string, string> = {
   "color.role": "shadcn theme",
   "color.extra": "Extra roles",
   "color.palette": "Palettes",
+  "typography.font": "Font families",
+  "typography.size": "Font sizes",
+  "typography.lineHeight": "Line heights",
+  "typography.letterSpacing": "Letter spacing",
+  "typography.weight": "Font weights",
+  "radius.scale": "Radius",
 }
 
 export interface CssGroup {
@@ -73,6 +80,15 @@ export function cssGroups(tree: TokenGroup): CssGroup[] {
     groups.get(key)!.leaves.push(leaf)
   }
   return [...groups.values()]
+}
+
+/**
+ * Tailwind v4 theme variables that point at a token: its `$theme` names, or
+ * `color-<name>` for a color.
+ */
+export function themeNames(token: Token): string[] {
+  if (token.$theme) return token.$theme
+  return token.$type === "color" && token.$css ? [`color-${token.$css}`] : []
 }
 
 const toHsl = converter("hsl")

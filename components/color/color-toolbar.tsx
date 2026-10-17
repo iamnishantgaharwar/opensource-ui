@@ -5,6 +5,7 @@ import {
   Cancel01Icon,
   CodeIcon,
   SparklesIcon,
+  TextFontIcon,
   Tick02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -14,7 +15,13 @@ import { HexColorPicker } from "react-colorful"
 
 import { ColorTextField, EMPTY_SWATCH } from "@/components/color/color-input"
 import { NeutralPicker } from "@/components/color/neutral-picker"
+import { RadiusControls } from "@/components/radius/radius-controls"
 import { SegmentedControl } from "@/components/segmented-control"
+import {
+  BaseSizeInput,
+  FontSelect,
+  RatioInput,
+} from "@/components/typography/typography-controls"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
@@ -37,6 +44,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useCopy } from "@/hooks/use-copy"
+import { useOverflowEnd } from "@/hooks/use-overflow-end"
 import { useModuleSettings, useSettings } from "@/hooks/use-settings"
 import { exportShadcn } from "@/lib/export/shadcn"
 import {
@@ -75,7 +83,7 @@ const PICKER_STYLE = { width: "100%", height: 160 }
 const PICKER_CLASS = "max-sm:h-28!"
 
 const TOOL_BUTTON =
-  "relative grid size-9 shrink-0 place-items-center rounded-lg outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-popup-open:bg-muted"
+  "relative grid size-9 shrink-0 place-items-center rounded-lg max-sm:size-8 outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-popup-open:bg-muted"
 
 /**
  * A labelled tool: color dot plus its role name. On phones the name is hidden
@@ -83,84 +91,129 @@ const TOOL_BUTTON =
  * the other tools, so the whole bar fits without scrolling.
  */
 const TOOL_CHIP =
-  "relative flex h-9 shrink-0 items-center gap-2 rounded-lg pr-3 pl-2 text-[13px] font-medium outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-popup-open:bg-muted max-sm:w-9 max-sm:justify-center max-sm:px-0"
+  "relative flex h-9 shrink-0 items-center gap-2 rounded-lg pr-3 pl-2 text-[13px] font-medium outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-popup-open:bg-muted max-sm:h-8 max-sm:w-8 max-sm:justify-center max-sm:px-0"
 
 /**
- * Floating color toolbar (Figma-style) for editing the color settings from any
- * page. Each button opens its panel above the bar; changes apply live and are
- * saved like the main controls. `children` adds page-specific tools at the end.
+ * Floating toolbar (Figma-style) for editing the color and type settings from
+ * any page. Each button opens its panel above the bar; changes apply live and
+ * are saved like the main controls. `children` adds page-specific tools at
+ * the end.
  */
 export function ColorToolbar({ children }: { children?: React.ReactNode }) {
   const [color, update] = useModuleSettings("color")
+  const [scroller, more] = useOverflowEnd<HTMLDivElement>()
 
   return (
-    <div
-      role="group"
-      aria-label="Color toolbar"
-      className="sticky bottom-6 z-30 mx-auto mt-6 no-scrollbar flex w-fit max-w-full items-center gap-0.5 overflow-x-auto rounded-[14px] border bg-popover/95 p-1 text-popover-foreground shadow-lg backdrop-blur sm:gap-1 sm:p-1.5"
-    >
-      <ToolPopover
-        label="Primary"
-        chip
-        trigger={<Swatch fill={color.primary} text="Primary" />}
+    // The frame holds the border and background; the tools scroll inside it,
+    // so the fade can sit on the frame's edge above them.
+    <div className="sticky bottom-6 z-30 mx-auto mt-6 w-fit max-w-full overflow-hidden rounded-[14px] border bg-popover/95 text-popover-foreground shadow-lg backdrop-blur">
+      <div
+        ref={scroller}
+        role="group"
+        aria-label="Design toolbar"
+        className="no-scrollbar flex items-center gap-0.5 overflow-x-auto p-1 sm:gap-1 sm:p-1.5"
       >
-        <PrimaryPanel color={color} update={update} />
-      </ToolPopover>
-      {SLOTS.map(({ name, label }) => {
-        const suggested = resolveSlot(
-          { ...color[name], auto: true },
-          color.primary,
-          name
-        )!
-        const slot = color[name]
-        return (
-          <ToolPopover
-            key={name}
-            label={slot.auto ? `${label} (auto-suggested)` : label}
-            chip
-            trigger={
-              <Swatch
-                fill={slot.auto ? suggested : slot.hex}
-                auto={slot.auto}
-                text={label}
+        <ToolPopover
+          label="Primary"
+          chip
+          trigger={<Swatch fill={color.primary} text="Primary" />}
+        >
+          <PrimaryPanel color={color} update={update} />
+        </ToolPopover>
+        {SLOTS.map(({ name, label }) => {
+          const suggested = resolveSlot(
+            { ...color[name], auto: true },
+            color.primary,
+            name
+          )!
+          const slot = color[name]
+          return (
+            <ToolPopover
+              key={name}
+              label={slot.auto ? `${label} (auto-suggested)` : label}
+              chip
+              trigger={
+                <Swatch
+                  fill={slot.auto ? suggested : slot.hex}
+                  auto={slot.auto}
+                  text={label}
+                />
+              }
+            >
+              <SlotPanel
+                label={label}
+                slot={slot}
+                suggested={suggested}
+                onChange={(next) => update({ [name]: next })}
               />
-            }
-          >
-            <SlotPanel
-              label={label}
-              slot={slot}
-              suggested={suggested}
-              onChange={(next) => update({ [name]: next })}
-            />
-          </ToolPopover>
-        )
-      })}
-      <Separator orientation="vertical" className="mx-1 h-5" />
-      <ToolPopover
-        label="Neutral"
-        trigger={<NeutralSwatch settings={color} />}
-        className="w-80"
-      >
-        <PanelHeader
-          title="Neutral"
-          hint="Grays for backgrounds, text and borders"
+            </ToolPopover>
+          )
+        })}
+        <Separator
+          orientation="vertical"
+          className="mx-1 h-6 max-sm:mx-0 data-vertical:self-center"
         />
-        <NeutralPicker
-          value={color.neutral}
-          primary={color.primary}
-          onChange={(neutral) => update({ neutral })}
+        <ToolPopover
+          label="Neutral"
+          trigger={<NeutralSwatch settings={color} />}
+          className="w-80"
+        >
+          <PanelHeader
+            title="Neutral"
+            hint="Grays for backgrounds, text and borders"
+          />
+          <NeutralPicker
+            value={color.neutral}
+            primary={color.primary}
+            onChange={(neutral) => update({ neutral })}
+          />
+        </ToolPopover>
+        <ToolPopover
+          label="Semantic colors"
+          trigger={<SemanticSwatch semantic={color.semantic} />}
+          className="w-80"
+        >
+          <SemanticPanel color={color} update={update} />
+        </ToolPopover>
+        <ToolPopover
+          label="Typography"
+          trigger={
+            <button type="button">
+              <HugeiconsIcon icon={TextFontIcon} className="size-5" />
+            </button>
+          }
+          className="w-80"
+          more={{ label: "Fine-tune in Typography", href: "/#typography" }}
+        >
+          <TypePanel />
+        </ToolPopover>
+        <ToolPopover
+          label="Radius"
+          trigger={<RadiusSwatch />}
+          className="w-80"
+          more={{ label: "Fine-tune in Radius", href: "/#radius" }}
+        >
+          <PanelHeader
+            title="Radius"
+            hint="How round corners are, from cards down to badges"
+          />
+          <RadiusControls />
+        </ToolPopover>
+        <Separator
+          orientation="vertical"
+          className="mx-1 h-6 max-sm:mx-0 data-vertical:self-center"
         />
-      </ToolPopover>
-      <ToolPopover
-        label="Semantic colors"
-        trigger={<SemanticSwatch semantic={color.semantic} />}
-        className="w-80"
-      >
-        <SemanticPanel color={color} update={update} />
-      </ToolPopover>
-      <Separator orientation="vertical" className="mx-1 h-6" />
-      {children}
-      <CopyCssButton />
+        {children}
+        <CopyCssButton />
+      </div>
+      {/* Only while tools are hidden to the right: a hint to scroll. */}
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-popover to-transparent transition-opacity duration-150 motion-reduce:transition-none",
+          more ? "opacity-100" : "opacity-0"
+        )}
+      />
     </div>
   )
 }
@@ -170,6 +223,7 @@ function ToolPopover({
   trigger,
   chip = false,
   className,
+  more = { label: "Fine-tune in Color", href: "/#color" },
   children,
 }: {
   label: string
@@ -177,6 +231,8 @@ function ToolPopover({
   /** Show the trigger as a labelled chip instead of an icon button. */
   chip?: boolean
   className?: string
+  /** Link at the bottom of the panel to the full settings. */
+  more?: { label: string; href: string }
   children: React.ReactNode
 }) {
   return (
@@ -200,10 +256,10 @@ function ToolPopover({
       >
         {children}
         <Link
-          href="/#color"
+          href={more.href}
           className="flex items-center gap-1 self-start rounded-md text-sm font-medium outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          Fine-tune in Color
+          {more.label}
           <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
         </Link>
       </PopoverContent>
@@ -272,6 +328,19 @@ function Swatch({
   )
 }
 
+/** A corner drawn at the current radius, like the preset buttons. */
+function RadiusSwatch(props: React.ComponentProps<"button">) {
+  const [radius] = useModuleSettings("radius")
+  return (
+    <button type="button" {...props}>
+      <span
+        className="block size-4 border-t-2 border-l-2 border-foreground/80"
+        style={{ borderTopLeftRadius: `${Math.min(radius.base, 1) * 0.75}rem` }}
+      />
+    </button>
+  )
+}
+
 function NeutralSwatch({
   settings,
   ...props
@@ -331,6 +400,49 @@ function PanelHeader({
 }
 
 type Update = (patch: Partial<ColorSettings>) => void
+
+/**
+ * The type settings that change what the preview looks like; unit and
+ * rounding only affect the exported numbers, so they stay on the main page.
+ */
+function TypePanel() {
+  const id = useId()
+  const [type, update] = useModuleSettings("typography")
+  return (
+    <>
+      <PanelHeader title="Typography" hint="Base size, ratio and fonts" />
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor={`${id}-base`}>Base size</Label>
+        <BaseSizeInput id={`${id}-base`} />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor={`${id}-ratio`}>Ratio</Label>
+        <RatioInput id={`${id}-ratio`} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <Label htmlFor={`${id}-body`}>Body</Label>
+          <FontSelect
+            id={`${id}-body`}
+            value={type.bodyFont}
+            onChange={(v) => update({ bodyFont: v as typeof type.bodyFont })}
+          />
+        </div>
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <Label htmlFor={`${id}-heading`}>Headings</Label>
+          <FontSelect
+            id={`${id}-heading`}
+            value={type.headingFont}
+            onChange={(v) =>
+              update({ headingFont: v as typeof type.headingFont })
+            }
+            allowSame
+          />
+        </div>
+      </div>
+    </>
+  )
+}
 
 function PrimaryPanel({
   color,

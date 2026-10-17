@@ -103,7 +103,7 @@ export function TintBadge({
   return (
     <Badge
       variant={tone === "outline" ? "outline" : "default"}
-      className={cn("h-6 gap-1.5 rounded-md px-2 text-[13px]", fill, className)}
+      className={cn("h-6 gap-1.5 rounded-md px-2 text-sm", fill, className)}
     >
       {dot && <span aria-hidden className="size-1.5 rounded-full bg-current" />}
       {children}
@@ -172,7 +172,7 @@ function Hero() {
         <span aria-hidden className="size-1.5 rounded-full bg-primary" />
         Version 2.0 is here
       </TintBadge>
-      <h2 className="text-3xl font-semibold tracking-tight @2xl:text-[2.5rem] @2xl:leading-12">
+      <h2 className="font-heading text-h3 @2xl:text-h2">
         Build a consistent product, faster
       </h2>
       <p className="text-base text-muted-foreground">
@@ -232,7 +232,7 @@ export function FormCard() {
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="pv-email">Email</Label>
           <Input id="pv-email" defaultValue="ada@" aria-invalid />
-          <p className="flex items-center gap-1 text-[13px] text-destructive">
+          <p className="flex items-center gap-1 text-sm text-destructive">
             <HugeiconsIcon icon={AlertCircleIcon} className="size-4" />
             Enter a full email, like ada@example.com.
           </p>
@@ -435,7 +435,7 @@ export function Dashboard() {
         ))}
         <div className="mt-6 flex flex-col gap-1 rounded-lg border p-3">
           <p className="text-sm font-medium">Upgrade to Pro</p>
-          <p className="text-[13px] text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Unlimited projects and seats.
           </p>
           <Button size="sm" className="mt-2 w-full">
@@ -458,12 +458,12 @@ export function Dashboard() {
           {STATS.map((s) => (
             <div key={s.label} className="flex flex-col gap-1">
               <span className="text-sm text-muted-foreground">{s.label}</span>
-              <span className="text-[2rem] leading-10 font-semibold tracking-tight tabular-nums">
+              <span className="font-heading text-h4 tabular-nums">
                 {s.value}
               </span>
               <span
                 className={cn(
-                  "flex items-center gap-1 text-[13px] font-medium",
+                  "flex items-center gap-1 text-sm font-medium",
                   TINT_TEXT.success
                 )}
               >

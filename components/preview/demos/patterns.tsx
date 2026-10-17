@@ -181,14 +181,23 @@ export function TypographyDemo() {
   return (
     <>
       <DemoSection
-        title="Headings"
-        description="Sizes are placeholders until the typography module drives them."
-        className="flex-col items-start gap-2"
+        title="Type scale"
+        description="Every role from your type settings, in your heading and body fonts."
+        className="flex-col items-start gap-3"
       >
-        <p className="text-4xl font-semibold tracking-tight">Display heading</p>
-        <p className="text-3xl font-semibold tracking-tight">Heading one</p>
-        <p className="text-2xl font-semibold tracking-tight">Heading two</p>
-        <p className="text-xl font-semibold">Heading three</p>
+        <p className="font-heading text-display">Display</p>
+        <h1 className="font-heading text-h1">Heading one</h1>
+        <h2 className="font-heading text-h2">Heading two</h2>
+        <h3 className="font-heading text-h3">Heading three</h3>
+        <h4 className="font-heading text-h4">Heading four</h4>
+        <h5 className="font-heading text-h5">Heading five</h5>
+        <h6 className="font-heading text-h6">Heading six</h6>
+        <p className="text-body-lg">Body large for lead paragraphs</p>
+        <p className="text-body">Body for running text</p>
+        <p className="text-body-sm">Body small for secondary text</p>
+        <p className="text-caption text-muted-foreground">
+          Caption for labels and fine print
+        </p>
       </DemoSection>
       <DemoSection title="Body" className="block max-w-2xl space-y-3">
         <p className="text-lg text-muted-foreground">

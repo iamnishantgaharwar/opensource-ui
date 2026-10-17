@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/collapsible"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
-const CONTROL_SECTIONS = ["#color", "#typography"]
+const CONTROL_SECTIONS = ["#color", "#typography", "#radius"]
 
 /**
  * Left column on desktop, pinned while the main column scrolls; below 1024px
@@ -40,7 +40,7 @@ export function ControlsPanel({ children }: { children: React.ReactNode }) {
         // own (scrollbar hidden) while the palettes scroll. The 4px inset
         // keeps focus rings from being clipped by the scroll box.
         <aside
-          aria-label="Color settings"
+          aria-label="Settings"
           className="no-scrollbar border-b lg:sticky lg:top-22 lg:-mx-1 lg:max-h-[calc(100svh-7rem)] lg:overflow-y-auto lg:border-b-0 lg:px-1 lg:pb-1"
         />
       }

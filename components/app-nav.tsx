@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils"
 const LINKS = [
   { href: "/#color", label: "Color" },
   { href: "/#typography", label: "Typography" },
+  { href: "/#radius", label: "Radius" },
   { href: "/preview", label: "Preview" },
   { href: "/#export", label: "Export" },
 ] as const

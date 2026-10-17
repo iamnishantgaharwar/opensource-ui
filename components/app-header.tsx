@@ -3,6 +3,7 @@ import Link from "next/link"
 import { AppNav } from "@/components/app-nav"
 import { LogoWordmark } from "@/components/logo-wordmark"
 import { ResetButton } from "@/components/reset-button"
+import { ShareButton } from "@/components/share-link"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 
@@ -26,6 +27,7 @@ export function AppHeader({ contained = false }: { contained?: boolean }) {
         </Link>
         <AppNav />
         <div className="ml-auto flex items-center gap-2">
+          <ShareButton />
           <ResetButton />
           <ThemeToggle />
         </div>

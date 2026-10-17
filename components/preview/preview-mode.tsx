@@ -6,7 +6,8 @@ import { createContext, useContext, useMemo, useState } from "react"
 
 import { ToolButton } from "@/components/color/color-toolbar"
 import { useSettings } from "@/hooks/use-settings"
-import { cssVariables, type Mode } from "@/lib/tokens/css"
+import { useStylesheets } from "@/hooks/use-stylesheets"
+import { cssVariables, stylesheetImports, type Mode } from "@/lib/tokens/css"
 import { generateTokens } from "@/lib/tokens/registry"
 import { cn } from "@/lib/utils"
 
@@ -44,8 +45,10 @@ export function PreviewModeButton() {
  * Applies the generated system to its subtree only, as inline CSS variables.
  * Children use the usual shadcn classes (`bg-primary`, `text-muted-foreground`)
  * and pick the generated values up through the cascade; the app chrome keeps
- * its own theme. `data-preview-mode` lets the preview show light or dark
- * independently of the app theme (see the dark variant in globals.css).
+ * its own theme. Tailwind's own sizes (text-sm…) are pointed at the type
+ * scale here too, and the user's web fonts are loaded. `data-preview-mode`
+ * lets the preview show light or dark independently of the app theme (see
+ * the dark variant in globals.css).
  */
 export function PreviewSurface({
   className,
@@ -57,14 +60,18 @@ export function PreviewSurface({
   const { mode } = useContext(PreviewModeContext)
   const settings = useSettings()
   const tokens = useMemo(() => generateTokens(settings), [settings])
-  const style = useMemo(() => cssVariables(tokens, mode), [tokens, mode])
+  const style = useMemo(
+    () => cssVariables(tokens, mode, { preview: true }),
+    [tokens, mode]
+  )
+  useStylesheets(useMemo(() => stylesheetImports(tokens), [tokens]))
 
   return (
     <div
       data-preview-mode={mode}
       style={style as React.CSSProperties}
       className={cn(
-        "bg-background text-foreground [color-scheme:light] selection:bg-(--selection) selection:text-(--selection-foreground)",
+        "bg-background font-sans text-base text-foreground [color-scheme:light] selection:bg-(--selection) selection:text-(--selection-foreground)",
         mode === "dark" && "dark [color-scheme:dark]",
         className
       )}

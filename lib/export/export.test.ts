@@ -37,7 +37,7 @@ describe("shadcn export", () => {
     expect(theme).toContain("--color-border: var(--border);")
     expect(theme).toContain("--color-primary-500: var(--primary-500);")
     expect(theme).toContain("--color-link: var(--link);")
-    expect(theme).toContain("--radius-lg: var(--radius);")
+    expect(theme).toContain("--radius-lg: var(--radius-lg);")
     expect(block(code, ":root").radius).toBe("0.625rem")
   })
 
@@ -46,7 +46,7 @@ describe("shadcn export", () => {
     // replaced wholesale by the export: the base layer must still compile.
     const css = [
       '@import "tailwindcss";',
-      '@source inline("bg-background border-border rounded-lg bg-primary-500 text-link bg-success");',
+      '@source inline("bg-background border-border rounded-lg bg-primary-500 text-link bg-success text-h1 text-sm font-heading");',
       "@custom-variant dark (&:is(.dark *));",
       code,
       "@layer base { * { @apply border-border outline-ring/50; } body { @apply bg-background text-foreground; } }",
@@ -58,14 +58,46 @@ describe("shadcn export", () => {
     for (const [cls, decl] of [
       ["bg-background", "background-color: var(--background)"],
       ["border-border", "border-color: var(--border)"],
-      ["rounded-lg", "border-radius: var(--radius)"],
+      ["rounded-lg", "border-radius: var(--radius-lg)"],
       ["bg-primary-500", "background-color: var(--primary-500)"],
       ["text-link", "color: var(--link)"],
+      ["text-h1", "font-size: var(--font-size-h1)"],
+      ["text-sm", "font-size: var(--font-size-body-sm)"],
+      ["font-heading", "font-family: var(--font-heading)"],
     ]) {
       expect(result.css).toMatch(
         new RegExp(`\\.${cls} \\{\\s*${decl.replace(/[()]/g, "\\$&")}`)
       )
     }
+  })
+})
+
+describe("shadcn export: typography", () => {
+  const { code } = exportShadcn(tree)
+  const root = block(code, ":root")
+  const theme = code.slice(code.indexOf("@theme inline"))
+
+  it("defines fonts and every role in :root", () => {
+    expect(root["font-sans"]).toMatch(/^"Inter", /)
+    expect(root["font-size-display"]).toBe("4.75rem")
+    expect(root["line-height-h1"]).toBe("1.1")
+    expect(root["font-weight-body"]).toBe("400")
+  })
+
+  it("adds role utilities and points Tailwind's sizes at the scale", () => {
+    expect(theme).toContain("--font-sans: var(--font-sans);")
+    expect(theme).toContain("--text-h1: var(--font-size-h1);")
+    expect(theme).toContain("--text-h1--font-weight: var(--font-weight-h1);")
+    expect(theme).toContain("--text-sm: var(--font-size-body-sm);")
+    expect(theme).toContain(
+      "--text-sm--line-height: var(--line-height-body-sm);"
+    )
+  })
+
+  it("says how to load the web fonts", () => {
+    expect(code).toContain(
+      '@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap");'
+    )
   })
 })
 
@@ -88,6 +120,23 @@ describe("Tailwind v3 export", () => {
     )
     expect(config.code).toContain('background: "hsl(var(--background))"')
   })
+
+  it("adds radius from the radius module", () => {
+    expect(css.code).toContain("--radius: 0.625rem;")
+    expect(css.code).toContain("--radius-sm: 0.375rem;")
+    expect(config.code).toContain('lg: "var(--radius-lg)"')
+  })
+
+  it("adds font variables and fontFamily / fontSize entries", () => {
+    expect(css.code).toContain("--font-size-h1: 3.8125rem;")
+    expect(config.code).toContain('sans: ["var(--font-sans)"]')
+    expect(config.code).toContain(
+      'h1: ["var(--font-size-h1)", { lineHeight: "var(--line-height-h1)", letterSpacing: "var(--letter-spacing-h1)", fontWeight: "var(--font-weight-h1)" }]'
+    )
+    expect(config.code).toContain(
+      'sm: ["var(--font-size-body-sm)", { lineHeight: "var(--line-height-body-sm)" }]'
+    )
+  })
 })
 
 describe("JSON export", () => {
@@ -103,6 +152,14 @@ describe("JSON export", () => {
       "{color.palette.neutral.950}"
     )
     expect(json.color.palette.primary["500"].$type).toBe("color")
+  })
+
+  it("has a typography group", () => {
+    expect(json.typography.size.h1).toEqual({
+      $type: "dimension",
+      $value: "3.8125rem",
+    })
+    expect(json.typography.font.sans.$type).toBe("fontFamily")
   })
 })
 

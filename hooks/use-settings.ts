@@ -6,6 +6,7 @@ import {
   STORAGE_KEY,
 } from "@/lib/tokens/persist"
 import { defaultSettings, type DesignSettings } from "@/lib/tokens/registry"
+import { decodeSettings, SHARE_PARAM } from "@/lib/tokens/share"
 
 type ModuleId = keyof DesignSettings
 
@@ -21,6 +22,10 @@ function readStorage() {
   }
 }
 
+function readShareLink() {
+  return new URLSearchParams(window.location.search).get(SHARE_PARAM)
+}
+
 function writeStorage(value: string | null) {
   try {
     if (value === null) window.localStorage.removeItem(STORAGE_KEY)
@@ -31,10 +36,14 @@ function writeStorage(value: string | null) {
 // One client-side store for every module's settings. Updates are immutable,
 // so each module's slice keeps its identity until that module changes.
 // The server snapshot is always the defaults; React swaps in the saved
-// settings right after hydration.
+// settings right after hydration. A share link wins over saved settings: it's
+// what the person opening it wants to see. It isn't saved until they change
+// something, so their own settings come back on their next plain visit.
 const serverState = defaultSettings()
 let state =
-  typeof window === "undefined" ? serverState : restoreSettings(readStorage())
+  typeof window === "undefined"
+    ? serverState
+    : (decodeSettings(readShareLink()) ?? restoreSettings(readStorage()))
 const listeners = new Set<() => void>()
 let saveTimer: ReturnType<typeof setTimeout> | undefined
 

@@ -10,6 +10,11 @@ export type TokenValue = string | number
  * (e.g. "color.palette.neutral.200") so exporters can emit aliases.
  * `$css` is the CSS custom property name (without `--`) the token is
  * published under; tokens without it are not emitted as CSS variables.
+ * `$theme` lists Tailwind v4 theme variables (without `--`) that should
+ * point at it, e.g. ["text-h1", "text-6xl"]; colors map to `color-<name>`
+ * without needing it. `$import` is a stylesheet the token needs loaded (a
+ * web font). `$preview` replaces `$value` in the in-app preview when the two
+ * differ (rem sizes against a custom root; the preview runs on 16px).
  */
 export interface Token {
   $type: TokenType
@@ -19,6 +24,9 @@ export interface Token {
   $ref?: string
   $darkRef?: string
   $description?: string
+  $theme?: string[]
+  $import?: string
+  $preview?: TokenValue
 }
 
 export interface TokenGroup {

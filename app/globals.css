@@ -7,8 +7,54 @@
 @custom-variant dark (&:where(.dark, .dark *):not(:where([data-preview-mode="light"], [data-preview-mode="light"] *)));
 
 @theme inline {
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading);
   --font-sans: var(--font-sans);
+  /* Type roles (text-display … text-caption). The values exist only where
+     the generated theme is applied (the preview); see lib/modules/typography. */
+  --text-display: var(--font-size-display);
+  --text-display--line-height: var(--line-height-display);
+  --text-display--letter-spacing: var(--letter-spacing-display);
+  --text-display--font-weight: var(--font-weight-display);
+  --text-h1: var(--font-size-h1);
+  --text-h1--line-height: var(--line-height-h1);
+  --text-h1--letter-spacing: var(--letter-spacing-h1);
+  --text-h1--font-weight: var(--font-weight-h1);
+  --text-h2: var(--font-size-h2);
+  --text-h2--line-height: var(--line-height-h2);
+  --text-h2--letter-spacing: var(--letter-spacing-h2);
+  --text-h2--font-weight: var(--font-weight-h2);
+  --text-h3: var(--font-size-h3);
+  --text-h3--line-height: var(--line-height-h3);
+  --text-h3--letter-spacing: var(--letter-spacing-h3);
+  --text-h3--font-weight: var(--font-weight-h3);
+  --text-h4: var(--font-size-h4);
+  --text-h4--line-height: var(--line-height-h4);
+  --text-h4--letter-spacing: var(--letter-spacing-h4);
+  --text-h4--font-weight: var(--font-weight-h4);
+  --text-h5: var(--font-size-h5);
+  --text-h5--line-height: var(--line-height-h5);
+  --text-h5--letter-spacing: var(--letter-spacing-h5);
+  --text-h5--font-weight: var(--font-weight-h5);
+  --text-h6: var(--font-size-h6);
+  --text-h6--line-height: var(--line-height-h6);
+  --text-h6--letter-spacing: var(--letter-spacing-h6);
+  --text-h6--font-weight: var(--font-weight-h6);
+  --text-body-lg: var(--font-size-body-lg);
+  --text-body-lg--line-height: var(--line-height-body-lg);
+  --text-body-lg--letter-spacing: var(--letter-spacing-body-lg);
+  --text-body-lg--font-weight: var(--font-weight-body-lg);
+  --text-body: var(--font-size-body);
+  --text-body--line-height: var(--line-height-body);
+  --text-body--letter-spacing: var(--letter-spacing-body);
+  --text-body--font-weight: var(--font-weight-body);
+  --text-body-sm: var(--font-size-body-sm);
+  --text-body-sm--line-height: var(--line-height-body-sm);
+  --text-body-sm--letter-spacing: var(--letter-spacing-body-sm);
+  --text-body-sm--font-weight: var(--font-weight-body-sm);
+  --text-caption: var(--font-size-caption);
+  --text-caption--line-height: var(--line-height-caption);
+  --text-caption--letter-spacing: var(--letter-spacing-caption);
+  --text-caption--font-weight: var(--font-weight-caption);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -50,6 +96,8 @@
 }
 
 :root {
+  /* App headings use the app font; the preview sets its own. */
+  --font-heading: var(--font-sans);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);

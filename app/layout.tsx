@@ -4,6 +4,7 @@ import { Geist_Mono, Inter } from "next/font/google"
 import "./globals.css"
 import { InlineScript } from "@/components/inline-script"
 import { SettingsRestoreGate } from "@/components/settings-restore-gate"
+import { ShareUrlSync } from "@/components/share-link"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <SettingsRestoreGate />
+          <ShareUrlSync />
           <TooltipProvider>{children}</TooltipProvider>
           <Toaster position="bottom-right" />
         </ThemeProvider>

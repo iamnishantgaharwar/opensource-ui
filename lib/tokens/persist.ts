@@ -10,12 +10,13 @@ export const STORAGE_KEY = "opensource-ui:settings:v1"
 export const RESTORING_ATTR = "data-restoring"
 
 /**
- * Runs in <head> before first paint. If settings were saved, it marks <html>
+ * Runs in <head> before first paint. If settings were saved or the URL is a
+ * share link (?s=, see lib/tokens/share.ts), it marks <html>
  * so settings-driven UI stays hidden until the app has applied them, instead
  * of flashing the server-rendered defaults. The timeout is a safety net in
  * case scripts fail to load.
  */
-export const restoreScript = `try{if(localStorage.getItem(${JSON.stringify(STORAGE_KEY)})){var d=document.documentElement;d.setAttribute("${RESTORING_ATTR}","");setTimeout(function(){d.removeAttribute("${RESTORING_ATTR}")},5000)}}catch(e){}`
+export const restoreScript = `(function(){var h=/[?&]s=/.test(location.search);try{h=h||!!localStorage.getItem(${JSON.stringify(STORAGE_KEY)})}catch(e){}if(h){var d=document.documentElement;d.setAttribute("${RESTORING_ATTR}","");setTimeout(function(){d.removeAttribute("${RESTORING_ATTR}")},5000)}})()`
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v)

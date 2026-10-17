@@ -7,7 +7,10 @@ import {
   OpenPreviewButton,
   PreviewLinks,
 } from "@/components/preview/preview-links"
-import { Section, SectionPlaceholder } from "@/components/section"
+import { RadiusControls } from "@/components/radius/radius-controls"
+import { Section } from "@/components/section"
+import { TypeScaleSection } from "@/components/typography/type-scale-section"
+import { TypographyControls } from "@/components/typography/typography-controls"
 
 export default function Page() {
   return (
@@ -35,22 +38,40 @@ export default function Page() {
               </p>
             </div>
             <ColorControls />
-            <Section
+            <div
               id="typography"
-              size="sm"
-              title="Typography"
-              description="Base size, ratio and font family."
+              className="flex scroll-mt-28 flex-col gap-1 border-t pt-10 lg:scroll-mt-20"
             >
-              <SectionPlaceholder>Coming after color</SectionPlaceholder>
-            </Section>
+              <h2 className="text-[2rem] leading-10 font-semibold tracking-tight">
+                Typography
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Pick a base size and a ratio; every role from Display to Caption
+                follows.
+              </p>
+            </div>
+            <TypographyControls />
+            <div
+              id="radius"
+              className="flex scroll-mt-28 flex-col gap-1 border-t pt-10 lg:scroll-mt-20"
+            >
+              <h2 className="text-[2rem] leading-10 font-semibold tracking-tight">
+                Radius
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                How round corners are, from cards and dialogs down to badges.
+              </p>
+            </div>
+            <RadiusControls />
           </ControlsPanel>
         </div>
         <main className="flex min-w-0 flex-col gap-12 p-4 lg:p-0">
           <PalettesSection />
+          <TypeScaleSection />
           <Section
             id="preview"
             title="Preview"
-            description="See your colors on real shadcn components, in light and dark."
+            description="See your colors, type and radius on real shadcn components, in light and dark."
             action={<OpenPreviewButton />}
           >
             <PreviewLinks />
