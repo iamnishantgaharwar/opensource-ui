@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 
+import { BritneyFont } from "@/components/britney-font"
 import { ClosingCta } from "@/components/landing/closing-cta"
 import { DeviceMockups } from "@/components/landing/device-mockups"
 import { Faq } from "@/components/landing/faq"
@@ -17,9 +18,6 @@ import {
   SITE_NAME,
   SITE_URL,
 } from "@/lib/site"
-
-const BRITNEY_CSS =
-  "https://api.fontshare.com/v2/css?f[]=britney@700&display=swap"
 
 export const metadata: Metadata = {
   title: {
@@ -54,9 +52,7 @@ export default function LandingPage() {
           __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c"),
         }}
       />
-      {/* Britney for the headings (see --font-display in globals.css). */}
-      <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="" />
-      <link rel="stylesheet" href={BRITNEY_CSS} precedence="default" />
+      <BritneyFont />
       <LegacyShareRedirect />
       <Hero />
       <main>

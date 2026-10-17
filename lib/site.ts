@@ -11,18 +11,24 @@ export const COFFEE_URL = "https://buymeacoffee.com/nishantgaharwar"
  */
 export const LANDING_BRAND = DEFAULT_COLOR_SETTINGS.primary
 
+const PRODUCTION_URL = "https://opensource-ui.nishantgaharwar.com"
+
 /**
  * Where the site is deployed, for canonical URLs, social images and the
- * sitemap. Set NEXT_PUBLIC_SITE_URL in production (e.g. https://csskit.dev).
+ * sitemap. NEXT_PUBLIC_SITE_URL overrides it (e.g. for a preview deploy);
+ * local dev uses localhost so links stay on your machine.
  */
 export const SITE_URL = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.NODE_ENV === "production"
+      ? PRODUCTION_URL
+      : "http://localhost:3000")
 )
 
 export const SITE_NAME = "csskit"
-export const SITE_TITLE = "csskit · Design system generator for shadcn/ui"
+export const SITE_TITLE = "csskit · Design system generator"
 export const SITE_DESCRIPTION =
-  "Turn one brand color into a complete, accessible design system: OKLCH palettes, WCAG contrast checks in light and dark, a type scale, radius, shadows and spacing, exported as shadcn/ui, Tailwind CSS and JSON tokens. Free and open source."
+  "Turn one brand color into a complete, accessible design system: OKLCH palettes, WCAG contrast checks in light and dark, a type scale, radius, shadows and spacing, exported as CSS variables, Tailwind CSS and JSON tokens. Free and open source."
 export const AUTHOR = {
   name: "Nishant Gaharwar",
   url: "https://github.com/iamnishantgaharwar",
@@ -49,5 +55,5 @@ export const OG_IMAGE = {
   url: "/og.png",
   width: 1200,
   height: 630,
-  alt: "csskit: one brand color in, a complete design system out. Palettes, contrast checks and tokens for shadcn/ui and Tailwind.",
+  alt: "csskit: one brand color in, a complete design system out. Palettes, contrast checks and design tokens.",
 }

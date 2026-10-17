@@ -49,7 +49,7 @@ export function OgCard() {
           <span>A complete design system out.</span>
         </div>
         <span style={{ fontSize: 28, color: "#a1a1aa" }}>
-          Palettes · Contrast checks · Type scale · shadcn/ui & Tailwind tokens
+          Palettes · Contrast checks · Type scale · Design tokens
         </span>
       </div>
       {primary && (
