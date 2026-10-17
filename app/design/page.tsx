@@ -19,10 +19,14 @@ import { ShadowControls } from "@/components/shadow/shadow-controls"
 import { SpacingControls } from "@/components/spacing/spacing-controls"
 import { TypeScaleSection } from "@/components/typography/type-scale-section"
 import { TypographyControls } from "@/components/typography/typography-controls"
+import { pageMetadata } from "@/lib/metadata"
 
-export const metadata: Metadata = {
-  title: "Design · csskit",
-}
+export const metadata: Metadata = pageMetadata({
+  title: "Design",
+  description:
+    "Build your design system: set brand colors and get OKLCH palettes, light and dark roles, contrast checks, a type scale, radius, shadows and spacing, then export it.",
+  path: "/design",
+})
 
 export default function DesignPage() {
   return (

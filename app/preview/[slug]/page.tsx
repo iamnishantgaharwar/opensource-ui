@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { findPreviewPage, PREVIEW_PAGES } from "@/components/preview/catalog"
 import { PREVIEW_DEMOS } from "@/components/preview/demos"
 import { PreviewPage } from "@/components/preview/preview-page"
+import { pageMetadata } from "@/lib/metadata"
 
 // Every component page is prerendered; unknown slugs are 404s.
 export const dynamicParams = false
@@ -17,7 +18,12 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params
   const page = findPreviewPage(slug)
-  return page ? { title: `${page.label} · Preview · csskit` } : {}
+  if (!page) return {}
+  return pageMetadata({
+    title: `${page.label} · Preview`,
+    description: `${page.description} ${page.label} from shadcn/ui, painted with your generated design system.`,
+    path: `/preview/${page.slug}`,
+  })
 }
 
 export default async function ComponentPreviewPage(

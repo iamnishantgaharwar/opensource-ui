@@ -8,14 +8,23 @@ import {
 } from "@/components/preview/preview-mode"
 import { PreviewPageNav } from "@/components/preview/preview-nav"
 import { ShareUrlSync } from "@/components/share-link"
+import { pageMetadata } from "@/lib/metadata"
+import { SITE_NAME } from "@/lib/site"
 import {
   InspectButton,
   TokenInspector,
 } from "@/components/preview/token-inspector"
 
 export const metadata: Metadata = {
-  title: "Preview · csskit",
-  description: "See your generated colors on real shadcn components.",
+  ...pageMetadata({
+    title: "Preview",
+    description:
+      "See your generated design system on real shadcn/ui components, in light and dark.",
+    path: "/preview",
+  }),
+  // A plain title here would stop the root "· csskit" template reaching the
+  // component pages, so pass it on.
+  title: { default: "Preview", template: `%s · ${SITE_NAME}` },
 }
 
 export default function PreviewLayout({
