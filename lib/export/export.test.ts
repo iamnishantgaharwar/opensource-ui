@@ -46,7 +46,7 @@ describe("shadcn export", () => {
     // replaced wholesale by the export: the base layer must still compile.
     const css = [
       '@import "tailwindcss";',
-      '@source inline("bg-background border-border rounded-lg bg-primary-500 text-link bg-success text-h1 text-sm font-heading");',
+      '@source inline("bg-background border-border rounded-lg bg-primary-500 text-link bg-success text-h1 text-sm font-heading shadow-md p-4");',
       "@custom-variant dark (&:is(.dark *));",
       code,
       "@layer base { * { @apply border-border outline-ring/50; } body { @apply bg-background text-foreground; } }",
@@ -64,9 +64,11 @@ describe("shadcn export", () => {
       ["text-h1", "font-size: var(--font-size-h1)"],
       ["text-sm", "font-size: var(--font-size-body-sm)"],
       ["font-heading", "font-family: var(--font-heading)"],
+      ["shadow-md", "--tw-shadow: var(--shadow-md)"],
+      ["p-4", "padding: calc(var(--spacing) * 4)"],
     ]) {
       expect(result.css).toMatch(
-        new RegExp(`\\.${cls} \\{\\s*${decl.replace(/[()]/g, "\\$&")}`)
+        new RegExp(`\\.${cls} \\{\\s*${decl.replace(/[()*]/g, "\\$&")}`)
       )
     }
   })
@@ -119,6 +121,21 @@ describe("Tailwind v3 export", () => {
       '"primary-foreground": "hsl(var(--sidebar-primary-foreground))"'
     )
     expect(config.code).toContain('background: "hsl(var(--background))"')
+  })
+
+  it("adds shadows with their dark values and boxShadow", () => {
+    expect(css.code).toMatch(/--shadow-md: 0 4px 6px -1px color-mix/)
+    expect(css.code.slice(css.code.indexOf(".dark {"))).toContain(
+      "--shadow-md:"
+    )
+    expect(config.code).toContain('md: "var(--shadow-md)"')
+  })
+
+  it("scales spacing from --spacing", () => {
+    expect(css.code).toContain("--spacing: 0.25rem;")
+    expect(config.code).toContain("(n) => [n, `calc(var(--spacing) * ${n})`]")
+    // The config must still be valid JavaScript.
+    expect(() => new Function("module", config.code)({})).not.toThrow()
   })
 
   it("adds radius from the radius module", () => {

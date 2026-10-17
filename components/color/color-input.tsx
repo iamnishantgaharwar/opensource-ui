@@ -1,6 +1,6 @@
 "use client"
 
-import { Cancel01Icon } from "@hugeicons/core-free-icons"
+import { Add01Icon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { useState } from "react"
 import { HexColorPicker } from "react-colorful"
@@ -35,9 +35,9 @@ function format(hex: string, f: Format) {
   return hex.toUpperCase()
 }
 
-/** Striped look for a swatch with no color picked yet. */
+/** Dashed outline for a swatch with no color picked yet. */
 export const EMPTY_SWATCH =
-  "border border-dashed border-foreground/25 bg-[repeating-linear-gradient(45deg,transparent_0_4px,var(--muted)_4px_8px)] ring-0"
+  "border border-dashed border-foreground/40 bg-background ring-0"
 
 /**
  * Text field + format menu. Accepts HEX, RGB or HSL (any valid CSS color) and
@@ -136,11 +136,19 @@ export function ColorInput({
         <PopoverTrigger
           aria-label={`Pick ${label} color`}
           className={cn(
-            "size-9 shrink-0 rounded-lg border ring-2 ring-background transition-colors outline-none ring-inset hover:border-foreground/40 focus-visible:ring-3 focus-visible:ring-ring/50",
+            "grid size-9 shrink-0 place-items-center rounded-lg border ring-2 ring-background transition-colors outline-none ring-inset hover:border-foreground/40 focus-visible:ring-3 focus-visible:ring-ring/50",
             !value && EMPTY_SWATCH
           )}
           style={value ? { background: value } : undefined}
-        />
+        >
+          {/* Empty: a "+" says there's a color to add here. */}
+          {!value && (
+            <HugeiconsIcon
+              icon={Add01Icon}
+              className="size-4 text-muted-foreground"
+            />
+          )}
+        </PopoverTrigger>
         <PopoverContent align="start" className="w-auto">
           <HexColorPicker
             color={value ?? pickerStart}

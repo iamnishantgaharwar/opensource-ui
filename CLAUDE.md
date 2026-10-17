@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# Design System Generator
+# csskit — Design System Generator
 
 Turns brand colors and a typography preference into a design foundation (color palettes + shadcn-compatible roles, type scale), shows it in a live preview and exports tokens (CSS, Tailwind, JSON). Product spec: `docs/Design System Generator — PRD.md` — read the relevant section before building a feature.
 

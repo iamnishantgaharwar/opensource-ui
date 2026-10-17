@@ -7,9 +7,14 @@ import {
   PreviewModeProvider,
 } from "@/components/preview/preview-mode"
 import { PreviewPageNav } from "@/components/preview/preview-nav"
+import { ShareUrlSync } from "@/components/share-link"
+import {
+  InspectButton,
+  TokenInspector,
+} from "@/components/preview/token-inspector"
 
 export const metadata: Metadata = {
-  title: "Preview · opensource-ui",
+  title: "Preview · csskit",
   description: "See your generated colors on real shadcn components.",
 }
 
@@ -20,11 +25,12 @@ export default function PreviewLayout({
 }) {
   return (
     <div className="flex min-h-svh flex-col">
+      <ShareUrlSync />
       <AppHeader />
       <PreviewModeProvider>
-        {/* Full width, unlike the generator page: demos such as the resource
-            cards size themselves with container queries and need the room. */}
-        <div className="flex w-full flex-1 flex-col gap-6 p-4 lg:grid lg:grid-cols-[232px_minmax(0,1fr)] lg:items-start lg:gap-8 lg:p-8">
+        {/* The generator page's 1440px column, so the header doesn't move
+            between pages. */}
+        <div className="mx-auto flex w-full max-w-360 flex-1 flex-col gap-6 p-4 lg:grid lg:grid-cols-[232px_minmax(0,1fr)] lg:items-start lg:gap-8 lg:p-8">
           {/* Full-height divider halfway into the gap. It fits inside the
               existing widths so the demos keep their room. */}
           <div className="lg:-mr-4 lg:self-stretch lg:border-r lg:pr-4">
@@ -34,7 +40,9 @@ export default function PreviewLayout({
             {children}
             <ColorToolbar>
               <PreviewModeButton />
+              <InspectButton />
             </ColorToolbar>
+            <TokenInspector />
           </main>
         </div>
       </PreviewModeProvider>

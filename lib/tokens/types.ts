@@ -1,5 +1,5 @@
 export type TokenType =
-  "color" | "dimension" | "fontFamily" | "fontWeight" | "number"
+  "color" | "dimension" | "fontFamily" | "fontWeight" | "number" | "shadow"
 
 export type TokenValue = string | number
 

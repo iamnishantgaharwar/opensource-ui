@@ -17,7 +17,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params
   const page = findPreviewPage(slug)
-  return page ? { title: `${page.label} · Preview · opensource-ui` } : {}
+  return page ? { title: `${page.label} · Preview · csskit` } : {}
 }
 
 export default async function ComponentPreviewPage(

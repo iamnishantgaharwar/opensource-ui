@@ -58,6 +58,8 @@ const GROUP_LABELS: Record<string, string> = {
   "typography.letterSpacing": "Letter spacing",
   "typography.weight": "Font weights",
   "radius.scale": "Radius",
+  "shadow.scale": "Shadows",
+  "spacing.base": "Spacing",
 }
 
 export interface CssGroup {

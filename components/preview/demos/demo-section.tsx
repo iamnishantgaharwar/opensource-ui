@@ -31,6 +31,8 @@ export function DemoSection({
 export const tone = (token: string) =>
   ({ "--tone": `var(--${token})` }) as React.CSSProperties
 
-/** Soft two-layer shadow for the sample cards; deeper on dark surfaces. */
-export const CARD_SHADOW =
-  "shadow-[0_1px_2px_rgb(0_0_0/0.05),0_10px_28px_-12px_rgb(0_0_0/0.18)] dark:shadow-[0_1px_2px_rgb(0_0_0/0.4),0_12px_32px_-12px_rgb(0_0_0/0.7)]"
+/**
+ * Sample-card elevation from the generated shadow scale, so the Shadows
+ * settings show up on the cards (dark mode gets its own stronger values).
+ */
+export const CARD_SHADOW = "shadow-md"

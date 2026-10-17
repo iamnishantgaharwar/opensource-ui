@@ -85,7 +85,8 @@ export const PREVIEW_PAGES = [
     slug: "surfaces",
     label: "Surfaces",
     group: "Patterns",
-    description: "Background layers, borders, overlay and selection.",
+    description:
+      "Elevation, background layers, borders, overlay and selection.",
   },
 ] as const satisfies ReadonlyArray<{
   slug: string

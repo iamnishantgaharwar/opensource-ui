@@ -1,5 +1,7 @@
 import { colorModule } from "@/lib/modules/color"
 import { radiusModule } from "@/lib/modules/radius"
+import { shadowModule } from "@/lib/modules/shadow"
+import { spacingModule } from "@/lib/modules/spacing"
 import { typographyModule } from "@/lib/modules/typography"
 import type { TokenGroup, TokenModule } from "@/lib/tokens/types"
 
@@ -8,6 +10,8 @@ export const tokenModules = [
   colorModule,
   typographyModule,
   radiusModule,
+  shadowModule,
+  spacingModule,
 ] as const
 
 type Modules = (typeof tokenModules)[number]

@@ -4,7 +4,6 @@ import { Geist_Mono, Inter } from "next/font/google"
 import "./globals.css"
 import { InlineScript } from "@/components/inline-script"
 import { SettingsRestoreGate } from "@/components/settings-restore-gate"
-import { ShareUrlSync } from "@/components/share-link"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -12,7 +11,7 @@ import { restoreScript } from "@/lib/tokens/persist"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
-  title: "Design System Generator",
+  title: "csskit · Design System Generator",
   description:
     "Turn brand colors and a type preference into a shadcn-ready design system: palettes, roles, type scale and tokens.",
 }
@@ -46,7 +45,6 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <SettingsRestoreGate />
-          <ShareUrlSync />
           <TooltipProvider>{children}</TooltipProvider>
           <Toaster position="bottom-right" />
         </ThemeProvider>

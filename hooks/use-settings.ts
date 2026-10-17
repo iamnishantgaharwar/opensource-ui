@@ -1,10 +1,17 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react"
 
 import {
+  LEGACY_STORAGE_KEY,
   RESTORING_ATTR,
   restoreSettings,
   STORAGE_KEY,
 } from "@/lib/tokens/persist"
+import {
+  emptyHistory,
+  record,
+  redo as redoStep,
+  undo as undoStep,
+} from "@/lib/tokens/history"
 import { defaultSettings, type DesignSettings } from "@/lib/tokens/registry"
 import { decodeSettings, SHARE_PARAM } from "@/lib/tokens/share"
 
@@ -16,7 +23,15 @@ const SAVE_DELAY_MS = 250
 // doesn't persist.
 function readStorage() {
   try {
-    return window.localStorage.getItem(STORAGE_KEY)
+    const saved = window.localStorage.getItem(STORAGE_KEY)
+    if (saved !== null) return saved
+    // Settings saved before the rename: move them to the new key.
+    const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY)
+    if (legacy !== null) {
+      window.localStorage.setItem(STORAGE_KEY, legacy)
+      window.localStorage.removeItem(LEGACY_STORAGE_KEY)
+    }
+    return legacy
   } catch {
     return null
   }
@@ -46,8 +61,18 @@ let state =
     : (decodeSettings(readShareLink()) ?? restoreSettings(readStorage()))
 const listeners = new Set<() => void>()
 let saveTimer: ReturnType<typeof setTimeout> | undefined
+// Undo/redo lives in memory only; a reload starts a fresh history.
+let history = emptyHistory<DesignSettings>()
+// A stable object per change, for useSyncExternalStore.
+let historyState = { canUndo: false, canRedo: false }
+const serverHistoryState = historyState
 
 function emit() {
+  const canUndo = history.past.length > 0
+  const canRedo = history.future.length > 0
+  if (canUndo !== historyState.canUndo || canRedo !== historyState.canRedo) {
+    historyState = { canUndo, canRedo }
+  }
   for (const listener of listeners) listener()
 }
 
@@ -80,18 +105,53 @@ export const settingsStore = {
     id: K,
     update: (current: DesignSettings[K]) => DesignSettings[K]
   ) {
+    history = record(history, state, Date.now())
     state = { ...state, [id]: update(state[id]) }
     emit()
     scheduleSave()
   },
-  /** Back to defaults; the only action that clears saved settings. */
+  /** Swaps in a whole system (a preset, an import) as one undo step. */
+  replace(next: DesignSettings) {
+    history = record(history, state, Date.now(), true)
+    state = next
+    emit()
+    scheduleSave()
+  },
+  /**
+   * Back to defaults; the only action that clears saved settings. Undoable:
+   * undoing saves the restored settings again.
+   */
   reset() {
+    history = record(history, state, Date.now(), true)
     clearTimeout(saveTimer)
     saveTimer = undefined
     writeStorage(null)
     state = defaultSettings()
     emit()
   },
+  undo() {
+    const step = undoStep(history, state)
+    if (!step) return
+    ;({ history, state } = step)
+    emit()
+    scheduleSave()
+  },
+  redo() {
+    const step = redoStep(history, state)
+    if (!step) return
+    ;({ history, state } = step)
+    emit()
+    scheduleSave()
+  },
+}
+
+/** Whether there's anything to undo or redo. */
+export function useHistory() {
+  return useSyncExternalStore(
+    settingsStore.subscribe,
+    () => historyState,
+    () => serverHistoryState
+  )
 }
 
 export function useSettings(): DesignSettings {

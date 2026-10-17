@@ -1,7 +1,7 @@
 import { restoreSettings } from "@/lib/tokens/persist"
 import { defaultSettings, type DesignSettings } from "@/lib/tokens/registry"
 
-/** Query parameter that carries shared settings: `/?s=…`. */
+/** Query parameter that carries shared settings: `/design?s=…`. */
 export const SHARE_PARAM = "s"
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>

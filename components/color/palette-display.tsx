@@ -146,7 +146,7 @@ function PaletteRow({
           phones (where it always overflows) the scrollbar is hidden and the
           right edge fades to show there's more; the fade clears at the end. */}
       <div className="overflow-x-auto max-md:no-scrollbar max-md:scroll-fade-r max-md:scroll-fade-e-8">
-        <ul className="grid min-w-190 grid-cols-11 gap-2 p-1">
+        <ul className="grid min-w-205 grid-cols-11 gap-2 p-1">
           {STEPS.map((step) => {
             const hex = palette.shades[step]
             const key = `${name}:${step}`

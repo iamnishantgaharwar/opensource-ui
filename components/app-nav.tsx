@@ -6,14 +6,13 @@ import { useSyncExternalStore } from "react"
 
 import { cn } from "@/lib/utils"
 
-// Color, Typography and Export are sections of the generator page; Preview is
-// its own page. Links work from any page.
+// Three destinations, not one link per module: the controls panel already
+// heads each module. Design and Export are sections of the generator page
+// (/design); Preview is its own page. Links work from any page.
 const LINKS = [
-  { href: "/#color", label: "Color" },
-  { href: "/#typography", label: "Typography" },
-  { href: "/#radius", label: "Radius" },
+  { href: "/design#color", label: "Design" },
   { href: "/preview", label: "Preview" },
-  { href: "/#export", label: "Export" },
+  { href: "/design#export", label: "Export" },
 ] as const
 
 function subscribeHash(onChange: () => void) {
@@ -28,11 +27,13 @@ export function AppNav() {
     () => window.location.hash,
     () => ""
   )
-  // On the generator page the section you jumped to is current; Color until
-  // you jump anywhere.
+  // On the generator page Export is current once you jump to it; anywhere
+  // else there is Design.
   const current =
-    pathname === "/"
-      ? `/${hash || "#color"}`
+    pathname === "/design"
+      ? hash === "#export"
+        ? "/design#export"
+        : "/design#color"
       : pathname.startsWith("/preview")
         ? "/preview"
         : null

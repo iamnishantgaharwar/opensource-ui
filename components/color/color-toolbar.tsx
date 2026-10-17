@@ -16,6 +16,8 @@ import { HexColorPicker } from "react-colorful"
 import { ColorTextField, EMPTY_SWATCH } from "@/components/color/color-input"
 import { NeutralPicker } from "@/components/color/neutral-picker"
 import { RadiusControls } from "@/components/radius/radius-controls"
+import { ShadowControls } from "@/components/shadow/shadow-controls"
+import { SpacingControls } from "@/components/spacing/spacing-controls"
 import { SegmentedControl } from "@/components/segmented-control"
 import {
   BaseSizeInput,
@@ -58,6 +60,8 @@ import {
   type Harmony,
   type SemanticColor,
 } from "@/lib/modules/color"
+import { shadowValue } from "@/lib/modules/shadow"
+import { clampSpacing } from "@/lib/modules/spacing"
 import { generateTokens } from "@/lib/tokens/registry"
 import { cn } from "@/lib/utils"
 
@@ -183,7 +187,10 @@ export function ColorToolbar({ children }: { children?: React.ReactNode }) {
             </button>
           }
           className="w-80"
-          more={{ label: "Fine-tune in Typography", href: "/#typography" }}
+          more={{
+            label: "Fine-tune in Typography",
+            href: "/design#typography",
+          }}
         >
           <TypePanel />
         </ToolPopover>
@@ -191,13 +198,37 @@ export function ColorToolbar({ children }: { children?: React.ReactNode }) {
           label="Radius"
           trigger={<RadiusSwatch />}
           className="w-80"
-          more={{ label: "Fine-tune in Radius", href: "/#radius" }}
+          more={{ label: "Fine-tune in Radius", href: "/design#radius" }}
         >
           <PanelHeader
             title="Radius"
             hint="How round corners are, from cards down to badges"
           />
           <RadiusControls />
+        </ToolPopover>
+        <ToolPopover
+          label="Shadows"
+          trigger={<ShadowSwatch />}
+          className="w-80"
+          more={{ label: "Fine-tune in Shadows", href: "/design#shadows" }}
+        >
+          <PanelHeader
+            title="Shadows"
+            hint="Depth for cards, popovers and dialogs"
+          />
+          <ShadowControls />
+        </ToolPopover>
+        <ToolPopover
+          label="Spacing"
+          trigger={<SpacingSwatch />}
+          className="w-80"
+          more={{ label: "Fine-tune in Spacing", href: "/design#spacing" }}
+        >
+          <PanelHeader
+            title="Spacing"
+            hint="Density of padding, gaps and control heights"
+          />
+          <SpacingControls />
         </ToolPopover>
         <Separator
           orientation="vertical"
@@ -223,7 +254,7 @@ function ToolPopover({
   trigger,
   chip = false,
   className,
-  more = { label: "Fine-tune in Color", href: "/#color" },
+  more = { label: "Fine-tune in Color", href: "/design#color" },
   children,
 }: {
   label: string
@@ -271,10 +302,13 @@ function ToolPopover({
 export function ToolButton({
   label,
   onClick,
+  pressed,
   children,
 }: {
   label: string
   onClick: () => void
+  /** For toggles: on/off, announced and shown as filled. */
+  pressed?: boolean
   children: React.ReactNode
 }) {
   return (
@@ -284,7 +318,8 @@ export function ToolButton({
           <button
             type="button"
             aria-label={label}
-            className={TOOL_BUTTON}
+            aria-pressed={pressed}
+            className={cn(TOOL_BUTTON, "aria-pressed:bg-muted")}
             onClick={onClick}
           />
         }
@@ -324,6 +359,40 @@ function Swatch({
         )}
       </span>
       {text && <span className="max-sm:hidden">{text}</span>}
+    </button>
+  )
+}
+
+/** Three bars spaced at the current density, like the preset buttons. */
+function SpacingSwatch(props: React.ComponentProps<"button">) {
+  const [spacing] = useModuleSettings("spacing")
+  return (
+    <button type="button" {...props}>
+      <span
+        aria-hidden
+        className="flex flex-col justify-center"
+        style={{ gap: `${clampSpacing(spacing.base) * 0.5}px` }}
+      >
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="block h-0.5 w-4 rounded-full bg-current" />
+        ))}
+      </span>
+    </button>
+  )
+}
+
+/** A small card at the current shadow strength (never fully flat, so the
+ * icon still reads when shadows are off). */
+function ShadowSwatch(props: React.ComponentProps<"button">) {
+  const [shadow] = useModuleSettings("shadow")
+  return (
+    <button type="button" {...props}>
+      <span
+        className="block h-3.5 w-4 rounded-[3px] border bg-background"
+        style={{
+          boxShadow: shadowValue("md", Math.max(shadow.strength, 0.6), false),
+        }}
+      />
     </button>
   )
 }

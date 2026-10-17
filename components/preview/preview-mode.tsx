@@ -14,7 +14,12 @@ import { cn } from "@/lib/utils"
 const PreviewModeContext = createContext<{
   mode: Mode
   setMode: (mode: Mode) => void
-}>({ mode: "light", setMode: () => {} })
+  /** Token inspector on: hovering a component shows the tokens it uses. */
+  inspect: boolean
+  setInspect: (inspect: boolean) => void
+}>({ mode: "light", setMode: () => {}, inspect: false, setInspect: () => {} })
+
+export const usePreviewMode = () => useContext(PreviewModeContext)
 
 /** Light/dark choice for the preview, kept while moving between pages. */
 export function PreviewModeProvider({
@@ -23,7 +28,11 @@ export function PreviewModeProvider({
   children: React.ReactNode
 }) {
   const [mode, setMode] = useState<Mode>("light")
-  const value = useMemo(() => ({ mode, setMode }), [mode])
+  const [inspect, setInspect] = useState(false)
+  const value = useMemo(
+    () => ({ mode, setMode, inspect, setInspect }),
+    [mode, inspect]
+  )
   return <PreviewModeContext value={value}>{children}</PreviewModeContext>
 }
 

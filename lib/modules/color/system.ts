@@ -53,6 +53,7 @@ export interface ColorSystem {
 }
 
 const WHITE: RoleValue = { hex: "#ffffff", ref: "white" }
+const BLACK: RoleValue = { hex: "#000000", ref: "black" }
 
 // Each slot rotates the hue a different way so equal harmonies don't collide.
 const SLOT_DIRECTION = { secondary: 1, accent: -1, tertiary: 2 } as const
@@ -116,11 +117,19 @@ export function generateColorSystem(settings: ColorSettings): ColorSystem {
     return ref(name, steps[steps.length - 1])
   }
 
-  /** Light or dark text, whichever reads better on `bg`. */
-  const on = (bg: RoleValue): RoleValue =>
-    contrast(bg.hex, neutral[50]) >= contrast(bg.hex, neutral[950])
-      ? n(50)
-      : n(950)
+  /**
+   * Light or dark text, whichever reads better on `bg`. Mid-tone fills (the
+   * brand input is kept exactly) can leave both tinted options just under
+   * 4.5:1; then pure white or black buys the last bit of contrast.
+   */
+  const on = (bg: RoleValue): RoleValue => {
+    const light = contrast(bg.hex, neutral[50])
+    const dark = contrast(bg.hex, neutral[950])
+    if (Math.max(light, dark) >= 4.5) return light >= dark ? n(50) : n(950)
+    return contrast(bg.hex, "#ffffff") >= contrast(bg.hex, "#000000")
+      ? WHITE
+      : BLACK
+  }
 
   /** A brand color used as a solid fill: the input itself, lightened in dark mode if needed. */
   const solid = (name: PaletteName): Role => {
@@ -154,11 +163,23 @@ export function generateColorSystem(settings: ColorSettings): ColorSystem {
   }
 
   const primaryRole = withFg(solid("primary"))
+  // Focus ring is a non-text indicator: 3:1 against the page (WCAG 1.4.11).
+  // A primary that already gets there is used as-is.
+  const ring: Role = {
+    light: readable("primary", "#ffffff", 3, "darker"),
+    dark: readable("primary", darkBg, 3, "lighter"),
+  }
   const secondary = brandRole("secondary")
   const accent = brandRole("accent")
   const semantic = Object.fromEntries(
     SEMANTIC_COLORS.map((name) => [name, withFg(solid(name))])
   ) as Record<SemanticColor, ReturnType<typeof withFg>>
+  // Destructive is also error text (text-destructive), so it needs 4.5:1 on
+  // the page; in dark mode that's a lighter red, as in shadcn's own theme.
+  semantic.destructive = withFg({
+    light: readable("destructive", "#ffffff", 4.5, "darker"),
+    dark: readable("destructive", darkBg, 4.5, "lighter"),
+  })
   const border: Role = { light: n(200), dark: { hex: "#ffffff", alpha: 0.1 } }
   const input: Role = { light: n(200), dark: { hex: "#ffffff", alpha: 0.15 } }
   const background: Role = { light: WHITE, dark: n(950) }
@@ -177,13 +198,17 @@ export function generateColorSystem(settings: ColorSettings): ColorSystem {
     secondary: secondary.fill,
     "secondary-foreground": secondary.fg,
     muted: { light: n(100), dark: n(800) },
-    "muted-foreground": { light: n(500), dark: n(400) },
+    // Must read on the muted fill, the darker of its two backgrounds.
+    "muted-foreground": {
+      light: readable("neutral", neutral[100], 4.5, "darker"),
+      dark: n(400),
+    },
     accent: accent.fill,
     "accent-foreground": accent.fg,
     destructive: semantic.destructive.fill,
     border,
     input,
-    ring: primaryRole.fill,
+    ring,
     ...chartRoles(palettes),
     sidebar: { light: n(50), dark: n(900) },
     "sidebar-foreground": foreground,
@@ -192,7 +217,7 @@ export function generateColorSystem(settings: ColorSettings): ColorSystem {
     "sidebar-accent": accent.fill,
     "sidebar-accent-foreground": accent.fg,
     "sidebar-border": border,
-    "sidebar-ring": primaryRole.fill,
+    "sidebar-ring": ring,
   }
 
   const tertiary = palettes.tertiary

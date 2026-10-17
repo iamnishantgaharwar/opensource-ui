@@ -254,9 +254,40 @@ const LAYERS = [
   ["inverse", "bg-(--inverse) text-(--inverse-foreground)"],
 ] as const
 
+// Literal class names so Tailwind generates each one.
+const ELEVATIONS = [
+  ["2xs", "shadow-2xs"],
+  ["xs", "shadow-xs"],
+  ["sm", "shadow-sm"],
+  ["md", "shadow-md"],
+  ["lg", "shadow-lg"],
+  ["xl", "shadow-xl"],
+  ["2xl", "shadow-2xl"],
+] as const
+
 export function SurfacesDemo() {
   return (
     <>
+      <DemoSection
+        title="Elevation"
+        description="The shadow scale, lowest to highest."
+        className="grid grid-cols-2 gap-6 p-2 @md:grid-cols-4 @2xl:grid-cols-7"
+      >
+        {ELEVATIONS.map(([name, cls]) => (
+          <div
+            key={name}
+            className={cn(
+              "flex aspect-square flex-col justify-end rounded-xl bg-card p-3 text-card-foreground",
+              cls
+            )}
+          >
+            <span className="text-sm font-medium">{name}</span>
+            <span className="font-mono text-xs text-muted-foreground">
+              --shadow-{name}
+            </span>
+          </div>
+        ))}
+      </DemoSection>
       <DemoSection title="Layers" className="grid gap-2 @2xl:grid-cols-2">
         {LAYERS.map(([name, cls]) => (
           <div

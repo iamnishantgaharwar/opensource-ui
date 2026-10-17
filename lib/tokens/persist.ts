@@ -4,7 +4,10 @@ import {
   type DesignSettings,
 } from "@/lib/tokens/registry"
 
-export const STORAGE_KEY = "opensource-ui:settings:v1"
+export const STORAGE_KEY = "csskit:settings:v1"
+
+/** The key from before the rename to csskit; read once, then moved over. */
+export const LEGACY_STORAGE_KEY = "opensource-ui:settings:v1"
 
 /** Set on <html> while saved settings are being restored (see restoreScript). */
 export const RESTORING_ATTR = "data-restoring"
@@ -16,7 +19,7 @@ export const RESTORING_ATTR = "data-restoring"
  * of flashing the server-rendered defaults. The timeout is a safety net in
  * case scripts fail to load.
  */
-export const restoreScript = `(function(){var h=/[?&]s=/.test(location.search);try{h=h||!!localStorage.getItem(${JSON.stringify(STORAGE_KEY)})}catch(e){}if(h){var d=document.documentElement;d.setAttribute("${RESTORING_ATTR}","");setTimeout(function(){d.removeAttribute("${RESTORING_ATTR}")},5000)}})()`
+export const restoreScript = `(function(){var h=/[?&]s=/.test(location.search);try{h=h||!!localStorage.getItem(${JSON.stringify(STORAGE_KEY)})||!!localStorage.getItem(${JSON.stringify(LEGACY_STORAGE_KEY)})}catch(e){}if(h){var d=document.documentElement;d.setAttribute("${RESTORING_ATTR}","");setTimeout(function(){d.removeAttribute("${RESTORING_ATTR}")},5000)}})()`
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v)
